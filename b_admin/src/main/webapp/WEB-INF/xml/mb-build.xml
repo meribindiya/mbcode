@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE tiles-definitions PUBLIC
+      "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" 
+      "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="login.definition" template="/WEB-INF/pages/login-layout.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="body" value="" />
+	</definition>
+
+
+	<definition name="login" extends="login.definition">
+		<put-attribute name="title" value="MB | Login" />
+		<put-attribute name="body" value="/WEB-INF/pages/login.jsp" />
+	</definition>
+
+
+	<definition name="main.definition" template="/WEB-INF/pages/main-layout.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/pages/header.jsp" />
+		<put-attribute name="menu" value="/WEB-INF/pages/menubar.jsp" />
+		<put-attribute name="body" value="" />
+	</definition>
+
+	<definition name="dashboard" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | Dashboard" />
+		<put-attribute name="body" value="/WEB-INF/pages/dashboard.jsp" />
+	</definition>
+
+	<definition name="eregister" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | Employee Add" />
+		<put-attribute name="body" value="/WEB-INF/pages/employee.jsp" />
+	</definition>
+
+	<definition name="allemployees" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | Employee All" />
+		<put-attribute name="body" value="/WEB-INF/pages/employee-all.jsp" />
+	</definition>
+
+
+	<definition name="category" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | Category Add" />
+		<put-attribute name="body" value="/WEB-INF/pages/category.jsp" />
+	</definition>
+
+	<definition name="categoryView" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | Categories" />
+		<put-attribute name="body" value="/WEB-INF/pages/category-all.jsp" />
+	</definition>
+
+
+	<definition name="subCategory" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | SubCategory Add" />
+		<put-attribute name="body" value="/WEB-INF/pages/subcategory.jsp" />
+	</definition>
+
+	<definition name="allSubCategory" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | Subcategories" />
+		<put-attribute name="body" value="/WEB-INF/pages/subcategory-all.jsp" />
+	</definition>
+
+
+	<definition name="service" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | Service Add" />
+		<put-attribute name="body" value="/WEB-INF/pages/service.jsp" />
+	</definition>
+
+	<definition name="serviceall" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | Services" />
+		<put-attribute name="body" value="/WEB-INF/pages/services-all.jsp" />
+	</definition>
+
+	<definition name="banner" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | Banners" />
+		<put-attribute name="body" value="/WEB-INF/pages/banner.jsp" />
+	</definition>
+
+	<definition name="banners" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | Banners" />
+		<put-attribute name="body" value="/WEB-INF/pages/banners.jsp" />
+	</definition>
+
+	<definition name="beautician-add" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | Banners" />
+		<put-attribute name="body" value="/WEB-INF/pages/beautician.jsp" />
+	</definition>
+
+	<definition name="beauticians" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | Banners" />
+		<put-attribute name="body" value="/WEB-INF/pages/beauticians.jsp" />
+	</definition>
+
+	<definition name="users" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | Users" />
+		<put-attribute name="body" value="/WEB-INF/pages/users.jsp" />
+	</definition>
+
+	<definition name="orders" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | Orders" />
+		<put-attribute name="body" value="/WEB-INF/pages/orders.jsp" />
+	</definition>
+
+	<definition name="book-order" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | Book Orders" />
+		<put-attribute name="body" value="/WEB-INF/pages/book-order.jsp" />
+	</definition>
+
+
+
+	<definition name="exception" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya | Exception" />
+		<put-attribute name="body" value="/WEB-INF/pages/exception.jsp" />
+	</definition>
+
+
+	<definition name="notification" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya  | Send Notifications" />
+		<put-attribute name="body"
+			value="/WEB-INF/pages/notification.jsp" />
+	</definition>
+
+	<definition name="notifications" extends="main.definition">
+		<put-attribute name="title" value="Meri Bindiya  | View All-Notifications" />
+		<put-attribute name="body"
+			value="/WEB-INF/pages/notification-views.jsp" />
+	</definition>
+
+
+
+</tiles-definitions>  
