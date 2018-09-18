@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "117698899337",
+    "firebase_url": "https://meribindiya-ffb23.firebaseio.com",
+    "project_id": "meribindiya-ffb23",
+    "storage_bucket": "meribindiya-ffb23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:117698899337:android:b93c5bbb94fee8e8",
+        "android_client_info": {
+          "package_name": "com.deecoders.meribindiya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "117698899337-shdquq95nb3poa1gtlfqoe50c7s3qj76.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "117698899337-shdquq95nb3poa1gtlfqoe50c7s3qj76.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFETrhDPtyJl9RhFQhXNdwx015NFFWsB0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

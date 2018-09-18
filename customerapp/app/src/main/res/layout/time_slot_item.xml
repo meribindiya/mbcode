@@ -1,0 +1,17 @@
+<LinearLayout
+    android:gravity="center_vertical"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/time"
+        android:background="@drawable/border_gray"
+        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
+        android:textColor="@color/dark_gray"
+        android:layout_height="30dp"
+        android:text="9 AM to 9:30 AM" />
+</LinearLayout>

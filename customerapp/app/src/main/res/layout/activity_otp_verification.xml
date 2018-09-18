@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff">
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:padding="30dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_gravity="center_horizontal"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:src="@drawable/otp" />
+        <TextView
+            android:textColor="@color/welcome"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textSize="26sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:text="Verify Your Number" />
+        <TextView
+            android:textColor="@color/dark_gray"
+            android:layout_width="wrap_content"
+            android:textSize="16sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:text="Enter the verification code sent to" />
+        <TextView
+            android:id="@+id/mobile"
+            android:layout_marginTop="3dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:textColor="@color/text"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="032323222" />
+        <TextView
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:textColor="@color/green1"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter otp" />
+        <com.alimuzaffar.lib.pin.PinEntryEditText
+            android:id="@+id/code"
+            android:layout_marginTop="25dp"
+            android:layout_width="match_parent"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_height="wrap_content"
+            android:cursorVisible="true"
+            android:digits="1234567890"
+            android:textColorHint="@color/hint"
+            android:inputType="number"
+            android:maxLength="4"
+            android:textIsSelectable="false"
+            android:textSize="20sp" />
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_height="30dp"
+                android:onClick="resend"
+                android:text="Did not receive the OTP?"
+                android:textSize="14sp"
+                android:textColor="@color/text"
+                android:layout_gravity="center_horizontal"/>
+            <TextView
+                android:layout_marginStart="3dp"
+                android:layout_marginLeft="3dp"
+                android:id="@+id/resend"
+                android:layout_width="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_height="30dp"
+                android:onClick="resend"
+                android:text="Resend OTP"
+                android:textSize="14sp"
+                android:textColor="@color/welcome"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/button"
+            android:text="Verify"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:layout_marginTop="20dp"
+            android:onClick="verify"/>
+    </LinearLayout>
+    <ProgressBar
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>
