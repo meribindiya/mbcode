@@ -29,6 +29,7 @@ import com.deecoders.meribindiya.R;
 import com.deecoders.meribindiya.constants.Constants;
 import com.deecoders.meribindiya.network.CustomRequest;
 import com.deecoders.meribindiya.network.VolleyLibrary;
+import com.deecoders.meribindiya.util.Utils;
 import com.devspark.appmsg.AppMsg;
 
 import org.json.JSONException;
@@ -101,6 +102,7 @@ public class Otp extends AppCompatActivity {
                             intent.putExtra("mobile", mobile.getText().toString());
                             startActivity(intent);
                         }
+                        //Utils.enableBootReceiver(Otp.this);
                         finish();
                     }
                     else{

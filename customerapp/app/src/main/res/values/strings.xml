@@ -1,4 +1,80 @@
 <resources>
     <string name="app_name">MeriBindiya</string>
     <string name="crash_toast_text">send crash report to developer</string>
+
+    <string name="refer_and_earn">Refer and Earn</string>
+    <string name="network_details">Network Details</string>
+    <string name="refer_n_earn">Refer &amp; Earn</string>
+    <string name="my_wallet">My Wallet</string>
+    <string name="refer_once_earn_lifetime">Refer Once Earn Lifetime</string>
+    <string name="earn_additional_every_time">Earn additional 50/- every time your friend makes a booking</string>
+    <string name="earn_upto">EARN UPTO</string>
+    <string name="rupee_10000">\u20B9 10000</string>
+    <string name="refer_now">REFER NOW</string>
+    <string name="title_activity_network_details">NetworkDetails</string>
+
+    <string name="network">Network</string>
+    <string name="refer_and_earn_money">REFER &amp; EARN MONEY</string>
+    <string name="earn_of_every_order_your">Earn 1% of every order of active member in your network for 6 levels</string>
+
+    <string name="points">Points</string>
+    <string name="your_missed_network_point">Your Missed Network Point</string>
+    <string name="share_unique_number">Share Unique Number</string>
+    <string name="your_network_member">Your Network Member</string>
+    <string name="your_active_network_member">Your Active Network Member</string>
+    <string name="till_now_your_network_point">Till Now Your Network Point</string>
+    <string name="terms_n_conditions">TERMS &amp; CONDITIONS</string>
+
+    <string name="share_contact">Share Contact</string>
+    <string name="share">Share</string>
+    <string name="my_shared_contacts">My Shared Contacts</string>
+    <string name="delete">Delete</string>
+
+    <string name="you_earn_rs_unlimited_lifetime">You Earn 50 Rs + \n Unlimited Lifetime  </string>
+    <string name="your_friend_rs">Your Friend \n Rs. 100</string>
+    <string name="your_beauty_network">Your Beauty Network</string>
+    <string name="title_location_permission">Need Location</string>
+    <string name="text_location_permission">To better serve you with the services of MeriBindiya, we need your location.</string>
+    <string name="ok">OK</string>
+
+    <string name="mobile_number">Mobile Number</string>
+    <string name="status">Status</string>
+    <string name="active">Active</string>
+    <string name="not_active">Not Active</string>
+    <string name="network_active">Network Active</string>
+    <string name="network_not_active">Network Not Active</string>
+    <string name="registered">Registered</string>
+    <string name="not_registered">Not Registered</string>
+    <string name="unknown_number">unknown Number</string>
+
+    <string name="instant_earning_offer">INSTANT EARNING OFFER</string>
+    <string name="refer_your_friend_and_earn_unlimited_offer">Refer your friend and Get 50 + Unlimited in your Wallet</string>
+
+    <string name="my_refer_contacts">My Refer Contacts</string>
+    <string name="view_all">View All</string>
+    <string name="my_total_earning">My Total Earning</string>
+    <string name="my_network">My Network</string>
+    <string name="my_missed_amount">My Missed Amount</string>
+    <string name="active_member">Active Member</string>
+
+
+    <string name="available_balance">Available Balance</string>
+
+    <!-- refer contact screen-->
+    <string name="refer_contact_success_msg">Contacts has been referred.</string>
+    <string name="my_refer_numbers">My Refer Numbers</string>
+
+    <!-- my active members -->
+    <string name="my_active_members">My Active Members</string>
+    <string name="my_earning_details">My Earning Details</string>
+    <string name="my_missed_earning_details">My Missed Earning Details</string>
+
+    <string name="date">Date</string>
+    <string name="amount">Amount</string>
+
+    <string name="search">Search</string>
+
+    <!-- payment option-->
+    <string name="proceed_btn_txt">Proceed and Pay \u20B9</string>
+
 </resources>

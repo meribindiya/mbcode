@@ -89,6 +89,12 @@ public class BookingDetails extends AppCompatActivity {
     @BindView(R.id.paymentStatus)
     TextView paymentStatus;
 
+    @BindView(R.id.paidWithWallet)
+    TextView paidWithWallet;
+
+    @BindView(R.id.netAmountPaid)
+    TextView netAmountPaid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,6 +186,9 @@ public class BookingDetails extends AppCompatActivity {
             duration.setText(model.getMinutes() + " (Mins)");
             container.addView(view);
         }
+
+        paidWithWallet.setText(bookingDetailModel.getPaidWithWallet() + " INR");
+        netAmountPaid.setText((bookingDetailModel.getTotal() - bookingDetailModel.getPaidWithWallet()) + " INR");
     }
 
     private void showStep(int step) {

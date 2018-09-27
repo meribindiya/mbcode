@@ -3,6 +3,9 @@ package com.deecoders.meribindiya.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.deecoders.meribindiya.model.UserModel;
+import com.google.gson.Gson;
+
 /**
  * Created by saif on 9/21/2016.
  */
@@ -61,5 +64,20 @@ public class MyPref {
     public static int getLogin(Context context){
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return prefs.getInt("isUserlogin", 0);
+    }
+
+    public static void setProfile(Context context, UserModel userModel) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putString("userModel", new Gson().toJson(userModel)).apply();
+    }
+    public static UserModel getProfile(Context context){
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String userModel =  prefs.getString("userModel", "");
+        return new Gson().fromJson(userModel, UserModel.class);
+    }
+
+    public static void clearAllPrefs(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().clear().apply();
     }
 }

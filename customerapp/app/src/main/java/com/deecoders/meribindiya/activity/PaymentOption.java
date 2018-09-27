@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -35,6 +36,7 @@ import com.deecoders.meribindiya.constants.Constants;
 import com.deecoders.meribindiya.model.ProductModel;
 import com.deecoders.meribindiya.util.MyPref;
 import com.deecoders.meribindiya.util.TinyDB;
+import com.deecoders.meribindiya.util.Utils;
 import com.devspark.appmsg.AppMsg;
 import com.google.gson.GsonBuilder;
 import com.paytm.pgsdk.PaytmOrder;
@@ -76,11 +78,20 @@ public class PaymentOption extends AppCompatActivity {
     ScrollView scrollView;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
+
+    @BindView(R.id.redeemWalletBalance)
+    CheckBox redeemWalletBalance;
+    @BindView(R.id.walletBalence)
+    TextView walletBalance;
+
     ArrayList<ProductModel> models = new ArrayList<>();
     Checksum checksum;
     JSONObject checksumObject;
     String orderId, orderDate, orderTime;
     int addressId;
+    double userWallet;
+    double payableAmount;
+    double paidWithWallet = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,16 +117,38 @@ public class PaymentOption extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Constants.clickEffect(v);
-                if(group.getCheckedRadioButtonId() == -1){
-                    AppMsg.makeText(PaymentOption.this, "Please select Payment Type!", AppMsg.STYLE_ALERT).show();
-                    return;
+                if (payableAmount == 0) {
+                    sendZeroRupeeRequest();
+                } else {
+                    if(group.getCheckedRadioButtonId() == -1){
+                        AppMsg.makeText(PaymentOption.this, "Please select Payment Type!", AppMsg.STYLE_ALERT).show();
+                        return;
+                    }
+                    if(group.getCheckedRadioButtonId()==R.id.cash){
+                        sendCashOrderRequest();
+                    }
+                    else if(group.getCheckedRadioButtonId()==R.id.paytm){
+                        getCheckSum();
+                    }
                 }
-                if(group.getCheckedRadioButtonId()==R.id.cash){
-                    sendCashOrderRequest();
+            }
+        });
+
+        redeemWalletBalance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (redeemWalletBalance.isChecked()) {
+                    payableAmount = (getPriceTotal() - userWallet) > 0 ? Utils.round(getPriceTotal() - userWallet, 2) : 0;
+                    paidWithWallet = Utils.round(getPriceTotal() - payableAmount, 2);
                 }
-                else if(group.getCheckedRadioButtonId()==R.id.paytm){
-                    getCheckSum();
+                else {
+                    payableAmount = getPriceTotal();
+                    paidWithWallet = 0;
                 }
+                for(int i = 0; i < group.getChildCount(); i++){
+                    ((RadioButton)group.getChildAt(i)).setEnabled(payableAmount != 0);
+                }
+                proceed.setText(getString(R.string.proceed_btn_txt) + " " + payableAmount);
             }
         });
 
@@ -127,11 +160,10 @@ public class PaymentOption extends AppCompatActivity {
         models = tinyDB.getListObject("products", ProductModel.class);
         clearDirtyModels();
 
-        int priceCount = 0;
-        for (ProductModel model : models) {
-            priceCount = priceCount + (model.getCount() * model.getPrice());
-        }
-        totalPrice.setText(priceCount+" INR");
+        totalPrice.setText(this.getPriceTotal()+" INR");
+        this.getWalletAmount ();
+        payableAmount = getPriceTotal();
+        proceed.setText(getString(R.string.proceed_btn_txt) + " " + payableAmount);
     }
 
     private void clearDirtyModels() {
@@ -154,11 +186,7 @@ public class PaymentOption extends AppCompatActivity {
         try {
             object.put("userId", MyPref.getId(this));
             object.put("email", MyPref.getEmail(this));
-            int priceCount = 0;
-            for (ProductModel model : models) {
-                priceCount = priceCount + (model.getCount() * model.getPrice());
-            }
-            object.put("finalAmount", priceCount);
+            object.put("finalAmount", payableAmount);
             object.put("mobile", Long.parseLong(MyPref.getMobile(this)));
             object.put("orderId", generateString());
         } catch (JSONException e) {
@@ -205,11 +233,7 @@ public class PaymentOption extends AppCompatActivity {
         try {
             object.put("userId", MyPref.getId(this));
             object.put("email", MyPref.getEmail(this));
-            int priceCount = 0;
-            for (ProductModel model : models) {
-                priceCount = priceCount + (model.getCount() * model.getPrice());
-            }
-            object.put("finalAmount", priceCount);
+            object.put("finalAmount", payableAmount);
             object.put("mobile", MyPref.getMobile(this));
             object.put("orderId", generateString());
             object.put("paramMap", checksumObject);
@@ -383,6 +407,7 @@ public class PaymentOption extends AppCompatActivity {
             object.put("utf1", "");
             object.put("utf2", "");
             object.put("utf3", "");
+            object.put("paidWithWallet", paidWithWallet);
 
             JSONArray allServices = new JSONArray();
             for (ProductModel model : models) {
@@ -456,6 +481,73 @@ public class PaymentOption extends AppCompatActivity {
             object.put("utf1", "");
             object.put("utf2", "");
             object.put("utf3", "");
+            object.put("paidWithWallet", paidWithWallet);
+
+            JSONArray allServices = new JSONArray();
+            for (ProductModel model : models) {
+                JSONObject service = new JSONObject();
+                service.put("quantity", model.getCount());
+                service.put("serviceid", model.getId());
+                allServices.put(service);
+            }
+            object.put("orderServiceRequests", allServices);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.e("tag", "sending: " + object.toString());
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, Constants.createOrder, object,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressBar.setVisibility(View.GONE);
+                        Log.e("tag", "" + response.toString());
+                        try {
+                            String status = response.getString("status");
+                            String msg = response.getString("message");
+                            if (status.equals("success")) {
+                                showAlert(PaymentOption.this);
+                            } else {
+                                Toast.makeText(PaymentOption.this, "" + msg, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(PaymentOption.this, "Network Problem!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        Volley.newRequestQueue(this).add(req);
+    }
+
+    private void sendZeroRupeeRequest() {
+        progressBar.setVisibility(View.VISIBLE);
+        JSONObject object = new JSONObject();
+        try {
+            object.put("mobile", Long.parseLong(MyPref.getMobile(this)));
+            object.put("userid", Long.parseLong(MyPref.getId(this)));
+            object.put("addressid", addressId);
+            object.put("booking_date", orderDate);
+            object.put("booking_time", orderTime);
+            object.put("category_id", models.get(0).getCatid());
+            object.put("online_source_id", "");
+            object.put("online_source_txndate", "");
+            object.put("online_source_txnid", "");
+            object.put("payment_source_id", "");
+            object.put("payment_source_txndate", "");
+            object.put("payment_source_txnid", "");
+            object.put("pymnt_mode", 2);
+            object.put("pymnt_source", "prepaid_wallet");
+
+            object.put("utf1", "");
+            object.put("utf2", "");
+            object.put("utf3", "");
+            object.put("paidWithWallet", paidWithWallet);
 
             JSONArray allServices = new JSONArray();
             for (ProductModel model : models) {
@@ -505,6 +597,50 @@ public class PaymentOption extends AppCompatActivity {
         startActivity(intent);
         Intent cong = new Intent(this, Congrats.class);
         startActivity(cong);
+    }
+
+    private void getWalletAmount () {
+        progressBar.setVisibility(View.VISIBLE);
+        JSONObject object = new JSONObject();
+        Log.e("tag", "getting wallet info ");
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, Constants.getWallet + MyPref.getId(this), null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressBar.setVisibility(View.GONE);
+                        Log.e("wallet info", "" + response.toString());
+                        try {
+                            String status = response.getString("status");
+                            String msg = response.getString("message");
+                            if (status.equals("success")) {
+                                userWallet = response.getJSONObject("object").getDouble("amount");
+                                walletBalance.setText(String.valueOf(userWallet));
+                            } else {
+                                Toast.makeText(PaymentOption.this, "" + msg, Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressBar.setVisibility(View.GONE);
+                VolleyLog.e("Error: ", error.getMessage());
+                Toast.makeText(PaymentOption.this, "Network Problem!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        Volley.newRequestQueue(this).add(req);
+    }
+
+    private double getPriceTotal () {
+        double priceCount = 0;
+        for (ProductModel model : models) {
+            priceCount = priceCount + (model.getCount() * model.getPrice());
+        }
+        return priceCount;
     }
 
 }

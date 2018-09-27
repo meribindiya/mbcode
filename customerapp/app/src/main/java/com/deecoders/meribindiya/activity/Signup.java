@@ -1,9 +1,22 @@
 package com.deecoders.meribindiya.activity;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +39,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.deecoders.meribindiya.R;
 import com.deecoders.meribindiya.constants.Constants;
+import com.deecoders.meribindiya.listeners.ServiceDataListener;
+import com.deecoders.meribindiya.util.LocationHelper;
 import com.devspark.appmsg.AppMsg;
 
 import org.json.JSONException;
@@ -33,6 +48,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
@@ -64,6 +80,9 @@ public class Signup extends AppCompatActivity {
     @BindView(R.id.anniversaryPanel)
     LinearLayout anniversaryPanel;
     String gender;
+    String userLocation = "";
+
+    private LocationHelper locationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +90,22 @@ public class Signup extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
 
-        //mobile.setText(""+getIntent().getStringExtra("mobile"));
+        mobile.setText(""+getIntent().getStringExtra("mobile"));
         selectGender(1);
+
+        locationHelper = new LocationHelper(this, new ServiceDataListener<String>() {
+            @Override
+            public void onData(String data) {
+                userLocation = data;
+            }
+        });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        locationHelper.onResume(true);
     }
 
     public void registerUser(View view) {
@@ -121,6 +154,7 @@ public class Signup extends AppCompatActivity {
             object.put("name", name.getText().toString());
             object.put("mobile", mobile.getText().toString());
             object.put("gender", gender);
+            object.put("location", userLocation);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -205,5 +239,17 @@ public class Signup extends AppCompatActivity {
             male.setAlpha(0.3f);
             female.setAlpha(1f);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        locationHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        locationHelper = null;
     }
 }

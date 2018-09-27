@@ -19,5 +19,9 @@
         <item name="colorControlActivated">@color/welcome</item>
         <item name="colorControlHighlight">@color/welcome</item>
     </style>
+    <style name="CheckboxStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">@color/welcome</item>  // for checked
+        <item name="android:textColorSecondary">@color/welcome</item>  // for unchecked
+    </style>
 
 </resources>

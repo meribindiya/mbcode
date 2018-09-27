@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:paddingLeft="@dimen/padding10"
+    android:paddingRight="@dimen/padding10"
+    android:orientation="vertical"
+    android:gravity="center">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/amountTV"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text="@string/date"
+            android:textSize="16sp"
+            android:gravity="left|center_vertical"
+            android:textStyle="bold"
+            android:textColor="@color/contact_number_color"/>
+        <TextView
+            android:id="@+id/dateTV"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text="@string/amount"
+            android:gravity="left|center_vertical"
+            android:textSize="16sp"
+            android:textColor="@color/contact_name_color"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/disabled_grey">
+    </View>
+</LinearLayout>

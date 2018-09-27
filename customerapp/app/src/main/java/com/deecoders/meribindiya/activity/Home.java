@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
@@ -49,12 +51,18 @@ import com.deecoders.meribindiya.R;
 import com.deecoders.meribindiya.adapter.CategoryAdapter;
 import com.deecoders.meribindiya.adapter.SliderAdapter;
 import com.deecoders.meribindiya.constants.Constants;
+import com.deecoders.meribindiya.fragment.MainMenu;
+import com.deecoders.meribindiya.listeners.ServiceDataListener;
 import com.deecoders.meribindiya.model.CategoryModel;
 import com.deecoders.meribindiya.model.ProductModel;
 import com.deecoders.meribindiya.model.SliderModel;
+import com.deecoders.meribindiya.model.UserModel;
+import com.deecoders.meribindiya.util.LocationHelper;
 import com.deecoders.meribindiya.util.MyPref;
 import com.deecoders.meribindiya.util.TinyDB;
+import com.deecoders.meribindiya.util.Utils;
 import com.deecoders.meribindiya.view.ExpandableHeightGridView;
+import com.devspark.appmsg.AppMsg;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -74,6 +82,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class Home extends AppCompatActivity {
     @BindView(R.id.gridView)
@@ -94,15 +103,19 @@ public class Home extends AppCompatActivity {
     RecyclerView recyclerView;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
+
+    MainMenu left_drawer;
+
+
     Handler handler;
     Runnable runnable;
     int sliderPos = 0;
     @BindView(R.id.location)
     ImageView location;
-    Handler handlerLoc;
-    Runnable runnableLoc;
-    LocationManager locationManager;
-    boolean locationUpdates;
+
+    private LocationHelper locationHelper;
+    private boolean locationNeeded = false;
+    private boolean isLocationMandatory = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +131,9 @@ public class Home extends AppCompatActivity {
             window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
         }
 
+        left_drawer = (MainMenu)getSupportFragmentManager().findFragmentById(R.id.left_drawer);
+        left_drawer.setServiceDataListener(serviceDataListener);
+
         DrawableCompat.setTint(menu.getDrawable(), ContextCompat.getColor(this, R.color.white));
         DrawableCompat.setTint(location.getDrawable(), ContextCompat.getColor(this, R.color.white));
         menu.setOnClickListener(new View.OnClickListener() {
@@ -127,17 +143,6 @@ public class Home extends AppCompatActivity {
                 drawerToggle();
             }
         });
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 111);
-        } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 112);
-        }
-
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            showGPSDisabledAlertToUser();
-        }
 
         getBanners();
         getCategories();
@@ -160,25 +165,24 @@ public class Home extends AppCompatActivity {
 
         Log.e("tag", "user_id: " + MyPref.getId(this));
         Log.e("tag", "date: "+new SimpleDateFormat("dd-MMM-yyyy").format(new Date()));
+        sendActiveUserPing();
+        Utils.setActiveUserAlarm(this);
+        Utils.enableBootReceiver(this);
 
+
+        locationHelper = new LocationHelper(this, new ServiceDataListener<String>() {
+            @Override
+            public void onData(String data) {
+                updateLocationInDB(data);
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            loadLocation();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 111);
-        } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 112);
-        }
+        if (locationNeeded)
+            locationHelper.onResume(isLocationMandatory);
     }
 
     private void getBanners() {
@@ -326,6 +330,24 @@ public class Home extends AppCompatActivity {
         Volley.newRequestQueue(this).add(req);
     }
 
+    private void sendActiveUserPing() {
+        Log.d("tag","in sendActiveUserPing ");
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, Constants.aliveUser
+                + MyPref.getId(this), null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("tag", "sendActiveUserPing " + response.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
+            }
+        });
+        Volley.newRequestQueue(this).add(req);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -333,9 +355,7 @@ public class Home extends AppCompatActivity {
         if (handler != null) {
             handler.removeCallbacks(runnable);
         }
-        if(handlerLoc != null){
-            handlerLoc.removeCallbacks(runnableLoc);
-        }
+        locationHelper = null;
     }
 
     private void clearCart() {
@@ -343,161 +363,84 @@ public class Home extends AppCompatActivity {
         tinyDB.putListObject("products", new ArrayList<ProductModel>());
     }
 
-    private void showGPSDisabledAlertToUser() {
-        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("GPS Alert");
-        dialog.setMessage("Please enable your GPS!");
-        dialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Intent callGPSSettingIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(callGPSSettingIntent);
-                dialogInterface.dismiss();
-            }
-        });
-        dialog.show();
-    }
-
-    private void loadLocation() {
-        Location location = getLastKnownLocation();
-        if (location != null) {
-            new GetLocationAsync(location.getLatitude(), location.getLongitude()).execute();
-        } else {
-            Log.e("tag", "location null");
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                Log.e("tag", "permission not granted");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 351);
-                return;
-            }
-            if (!locationUpdates) {
-                Log.e("tag", "start service");
-                boolean isPassiveEnabled = locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER);
-                boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-                boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                if (isGPSEnabled)
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
-                else if (isNetworkEnabled)
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
-                else if (isPassiveEnabled)
-                    locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0, 0, mLocationListener);
-                else
-                    Log.e("tag", "cannot start service");
-                startLocationSchedular();
-            }
-            locationUpdates = true;
+    @OnClick ({R.id.location, R.id.actionbar_textview})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.location:
+            case R.id.actionbar_textview:
+                locationNeeded = true;
+                isLocationMandatory = false;
+                locationHelper.onResume(isLocationMandatory);
+                break;
+            default:
+                locationNeeded = false;
         }
     }
-
-    private void startLocationSchedular() {
-        handlerLoc = new Handler();
-        runnableLoc = new Runnable() {
-            @Override
-            public void run() {
-                Location location = getLastKnownLocation();
-                if(location != null) {
-                    Log.e("tag", "run success");
-                    new GetLocationAsync(location.getLatitude(), location.getLongitude()).execute();
-                    return;
-                }
-                handlerLoc.postDelayed(runnableLoc, 1000);
+    private ServiceDataListener<UserModel> serviceDataListener = new ServiceDataListener<UserModel>() {
+        @Override
+        public void onData(UserModel data) {
+            title.setText(data.getLocation());
+            if (data.getLocation() == null || data.getLocation() == "") {
+                isLocationMandatory = true;
+                locationHelper.onResume(isLocationMandatory);
+                locationNeeded = true;
+                title.setText("updating..");
+            } else {
+                locationNeeded = false;
             }
-        };
-        handlerLoc.postDelayed(runnableLoc, 1000);
-    }
-
-    private final LocationListener mLocationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(final Location location) {
-            Log.e("tag", "new location");
-            new GetLocationAsync(location.getLatitude(), location.getLongitude()).execute();
-            if(locationManager != null)
-                locationManager.removeUpdates(mLocationListener);
-        }
-
-        @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String s) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String s) {
-
         }
     };
 
-    private Location getLastKnownLocation() {
-        if (locationManager == null)
-            return null;
-        List<String> providers = locationManager.getProviders(true);
-        Location bestLocation = null;
-        for (String provider : providers) {
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return null;
-            }
-            bestLocation = locationManager.getLastKnownLocation(provider);
-            if (bestLocation != null) {
-                break;
-            }
-        }
-        return bestLocation;
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        locationHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    private class GetLocationAsync extends AsyncTask<String, Void, String> {
-        double x, y;
-        StringBuilder str;
-
-        public GetLocationAsync(double latitude, double longitude) {
-            x = latitude;
-            y = longitude;
-            Log.e("tag", "lat: "+latitude);
-            Log.e("tag", "lang: "+longitude);
+    private void updateLocationInDB (final String location) {
+        Log.d("tag","in updateLocationInDB ");
+        title.setText("updating..");
+        progressBar.setVisibility(View.VISIBLE);
+        JSONObject object = new JSONObject();
+        try {
+            object.put("location", location);
+            object.put("mobile", MyPref.getMobile(this));
+            object.put("email", MyPref.getEmail(this));
+            object.put("name", MyPref.getName(this));
+            object.put("gender", MyPref.getGender(this));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                Geocoder geocoder = new Geocoder(Home.this, Locale.ENGLISH);
-                List<Address> addresses = geocoder.getFromLocation(x, y, 1);
-                str = new StringBuilder();
-                if (Geocoder.isPresent()) {
-                    Address returnAddress = addresses.get(0);
-                    //String one = returnAddress.getAddressLine(0);
-                    String one = returnAddress.getLocality()+", "+returnAddress.getAdminArea();
-                    String two = returnAddress.getAddressLine(1);
-                    String three = returnAddress.getAddressLine(2);
-                    if (three == null) {
-                        three = "";
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, Constants.userUpdate, object,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressBar.setVisibility(View.GONE);
+                        Log.e("tag", "" + response.toString());
+                        try {
+                            String status = response.getString("status");
+                            String msg = response.getString("message");
+                            if (status.equals("success")) {
+                                isLocationMandatory = false;
+                                locationNeeded = false;
+                                title.setText(location);
+                                Toast.makeText(Home.this, "Location Updated!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                AppMsg.makeText(Home.this, "" + msg, AppMsg.STYLE_ALERT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    str.append(one);
-                    return str.toString();
-                } else {
-                    Log.e("tag", "geocoder error");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e("tag", "geocoder error");
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(Home.this, "Network Problem!", Toast.LENGTH_SHORT).show();
             }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String add) {
-            if(title == null)
-                return;
-            if(add == null)
-                return;
-
-            try {
-                title.setText(add);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        });
+        Volley.newRequestQueue(this).add(req);
     }
 
 }

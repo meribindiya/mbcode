@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.Refer">
+    <LinearLayout
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/header_title_bar_bg"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+        <ImageView
+            android:onClick="finish"
+            android:id="@+id/back"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="35dp"
+            android:padding="4dp"
+            android:layout_height="35dp"
+            android:src="@drawable/arrow_back_white"/>
+        <LinearLayout
+            android:id="@+id/titlePanel"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/titleTxt"
+                android:textColor="#fff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/refer_n_earn"
+                android:textSize="20sp"/>
+        </LinearLayout>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:padding="25dp"
+        android:layout_below="@id/titleBar">
+
+        <ImageView
+            android:id="@+id/referLogoImageView"
+            android:layout_width="match_parent"
+            android:layout_height="225dp"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:src="@drawable/grp_people"
+            android:paddingRight="@dimen/padding20"
+            android:layout_alignParentTop="true" />
+        <LinearLayout
+            android:id="@+id/ribonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="-2dp"
+            android:orientation="horizontal"
+            android:layout_below="@id/referLogoImageView"
+            android:background="@drawable/ribon">
+            <TextView
+                android:id="@+id/ribonLeftTextView"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent"
+                android:textSize="15sp"
+                android:maxLines="2"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="@string/you_earn_rs_unlimited_lifetime" />
+
+            <TextView
+                android:id="@+id/ribonRightTextView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="@string/your_friend_rs" />
+            <android.support.v4.widget.Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.1"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/padding10"
+            android:layout_marginRight="@dimen/padding10"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/ribonLayout">
+
+            <TextView
+                android:id="@+id/referOnceTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:layout_marginBottom="30dp"
+                android:textColor="@color/welcome"
+                android:text="@string/refer_once_earn_lifetime"/>
+
+            <Button
+                android:id="@+id/referNowBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/refer_now"
+                android:textColor="@color/welcome"
+                android:textSize="18sp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/red_border"
+                style="?android:attr/borderlessButtonStyle" />
+
+            <Button
+                android:id="@+id/beautyNetworkBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/your_beauty_network"
+                android:textColor="@color/white"
+                android:background="@drawable/red_border_rounder_corner"
+                android:visibility="invisible"
+                style="?android:attr/borderlessButtonStyle"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

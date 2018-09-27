@@ -40,6 +40,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class AddAddress extends AppCompatActivity {
+
     @BindView(R.id.back)
     ImageView back;
     @BindView(R.id.titleTxt)

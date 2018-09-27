@@ -42,6 +42,9 @@ public class BookingDetailModel {
     @com.google.gson.annotations.Expose
     @com.google.gson.annotations.SerializedName("address")
     private AddressModel address;
+    @com.google.gson.annotations.Expose
+    @com.google.gson.annotations.SerializedName("paidWithWallet")
+    private double paidWithWallet;
 
     public String getBookedat() {
         return bookedat;
@@ -145,5 +148,13 @@ public class BookingDetailModel {
 
     public void setAddress(AddressModel address) {
         this.address = address;
+    }
+
+    public double getPaidWithWallet() {
+        return paidWithWallet;
+    }
+
+    public void setPaidWithWallet(double paidWithWallet) {
+        this.paidWithWallet = paidWithWallet;
     }
 }

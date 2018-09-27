@@ -5,7 +5,7 @@ android {
         applicationId "com.deecoders.meribindiya"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 4
+        versionCode 7
         multiDexEnabled true
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
