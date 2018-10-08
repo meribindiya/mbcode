@@ -23,5 +23,8 @@
         <item name="colorAccent">@color/welcome</item>  // for checked
         <item name="android:textColorSecondary">@color/welcome</item>  // for unchecked
     </style>
+    <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textSize">18sp</item>
+    </style>
 
 </resources>

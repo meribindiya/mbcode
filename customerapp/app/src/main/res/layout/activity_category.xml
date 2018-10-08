@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/light_gray1"
+    android:background="@color/light_gray2"
     android:layout_height="match_parent"
     tools:context=".activity.Category">
     <LinearLayout
@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:gravity="center_vertical"
-        android:background="@color/welcome"
+        android:background="@drawable/header"
         xmlns:android="http://schemas.android.com/apk/res/android">
         <ImageView
             android:id="@+id/back"
@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Beauty"
-                android:textSize="20sp"/>
+                android:textSize="22sp"/>
             <ImageView
                 android:id="@+id/arrowDown"
                 android:layout_marginStart="5dp"
@@ -86,12 +86,12 @@
             android:id="@+id/sliding_tabs"
             app:tabGravity="fill"
             app:tabSelectedTextColor="@color/white"
-            app:tabTextColor="@color/light_gray"
+            app:tabTextColor="@color/tabDimText"
             app:tabIndicatorColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-            android:background="@color/welcome"
+            app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
+            android:background="@drawable/header"
             app:tabMode="scrollable">
         </android.support.design.widget.TabLayout>
         <android.support.v4.view.ViewPager

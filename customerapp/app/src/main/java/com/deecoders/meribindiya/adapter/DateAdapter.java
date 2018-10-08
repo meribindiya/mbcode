@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.deecoders.meribindiya.R;
@@ -68,12 +69,12 @@ public class DateAdapter extends BaseAdapter {
         viewHolder.dayTxt.setText(model.getDay());
         if(model.isSelected()){
             selectedModel = model;
-            viewHolder.panel.setBackgroundColor(mContext.getResources().getColor(R.color.welcome));
+            viewHolder.image.setVisibility(View.VISIBLE);
             viewHolder.dateTxt.setTextColor(mContext.getResources().getColor(R.color.white));
             viewHolder.dayTxt.setTextColor(mContext.getResources().getColor(R.color.white));
         }
         else{
-            viewHolder.panel.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+            viewHolder.image.setVisibility(View.GONE);
             viewHolder.dateTxt.setTextColor(mContext.getResources().getColor(R.color.text));
             viewHolder.dayTxt.setTextColor(mContext.getResources().getColor(R.color.gray));
         }
@@ -98,11 +99,13 @@ public class DateAdapter extends BaseAdapter {
         // declare views here
         public ViewGroup panel;
         public TextView dateTxt, dayTxt;
+        public ImageView image;
         public CompleteListViewHolder(View base) {
             //initialize views here
             panel=base.findViewById(R.id.panel);
             dateTxt=base.findViewById(R.id.date);
             dayTxt=base.findViewById(R.id.day);
+            image=base.findViewById(R.id.image);
         }
     }
 }

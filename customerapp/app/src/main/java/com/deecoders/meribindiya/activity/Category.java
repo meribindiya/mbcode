@@ -118,13 +118,14 @@ public class Category extends AppCompatActivity {
         });
 
         registerReceiver(AddToCartReceiver, new IntentFilter("cart"));
+
+        models.clear();
+        getSubCategories();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        models.clear();
-        getSubCategories();
         showCartData();
     }
 

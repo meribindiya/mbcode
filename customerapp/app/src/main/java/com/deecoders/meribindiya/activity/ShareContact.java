@@ -81,7 +81,16 @@ public class ShareContact extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     private ArrayList<ContactModel> contactList = new ArrayList<>();
 
-    private String SHARE_SMS_BODY  = "Download MeriBindiya app for refer and earn money";
+    private String SHARE_SMS_BODY  = "Hi Friends,\n" +
+            "I called a beautician at my home from MeriBindiya At HOME SALON.\n" +
+            "\n" +
+            "The pricing was very affordable and the quality of service was excelent.\n" +
+            "\n" +
+            "I really love the services & recommend all to avail the services at least once.\n" +
+            "\n" +
+            "Install Meribindiya App and Get Rs 100 in your wallet. \n" +
+            "\n" +
+            "Download MeriBindiya app now - https://tinyurl.com/appmeribindiya";
     private ContactAdapter contactAdapter;
     private boolean permissionDenied = false;
     private AlertDialog mAlertDialog;

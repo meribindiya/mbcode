@@ -193,7 +193,7 @@ public class BookingDetails extends AppCompatActivity {
 
     private void showStep(int step) {
         if (step == 0) {
-            line1.setBackgroundColor(getResources().getColor(R.color.green1));
+            line1.setBackgroundColor(getResources().getColor(R.color.gray1));
             line2.setBackgroundColor(getResources().getColor(R.color.gray1));
             circle1.setBackgroundDrawable(getResources().getDrawable(R.drawable.tick));
             circle2.setBackgroundDrawable(getResources().getDrawable(R.drawable.gray_circle));
@@ -212,7 +212,7 @@ public class BookingDetails extends AppCompatActivity {
             circle3.setBackgroundDrawable(getResources().getDrawable(R.drawable.gray_circle));
         } else {
             line1.setBackgroundColor(getResources().getColor(R.color.green1));
-            line2.setBackgroundColor(getResources().getColor(R.color.green1));
+            line2.setBackgroundColor(getResources().getColor(R.color.gray1));
             circle1.setBackgroundDrawable(getResources().getDrawable(R.drawable.tick));
             circle2.setBackgroundDrawable(getResources().getDrawable(R.drawable.tick));
             circle3.setBackgroundDrawable(getResources().getDrawable(R.drawable.gray_circle));

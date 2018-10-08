@@ -29,7 +29,6 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -127,7 +126,8 @@
             android:name=".activity.SelectDateTime"
             android:configChanges="screenSize|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/EditScreenTextInputLayoutStyle" />
+            android:theme="@style/EditScreenTextInputLayoutStyle">
+        </activity>
         <activity
             android:name=".activity.OrderDetails"
             android:configChanges="screenSize|orientation"

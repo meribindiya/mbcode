@@ -9,7 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="55dp"
     android:gravity="center_vertical"
-    android:background="@color/welcome">
+    android:background="@drawable/header">
     <ImageView
         android:onClick="finish"
         android:id="@+id/back"

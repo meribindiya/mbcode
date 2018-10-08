@@ -64,7 +64,7 @@ public class BookingFrag extends Fragment {
                 try {
                     String [] arr = time.split(" to ");
                     if(arr.length==2) {
-                        Date bDate = new SimpleDateFormat("dd-MM-yyyy hh a").parse(date + " " + arr[1]);
+                        Date bDate = new SimpleDateFormat("dd-MMM-yyyy hh a").parse(date + " " + arr[1]);
                         if (bDate.getTime() < System.currentTimeMillis()) {
                             historyModels.add(model);
                             continue;

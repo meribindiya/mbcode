@@ -18,7 +18,7 @@
         <ImageView
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:src="@drawable/tick" />
+            android:src="@drawable/largecheck" />
         <TextView
             android:layout_marginTop="30dp"
             android:textColor="@color/welcome"

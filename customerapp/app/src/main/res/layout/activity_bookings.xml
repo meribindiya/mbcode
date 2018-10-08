@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:gravity="center_vertical"
-        android:background="@color/welcome"
+        android:background="@drawable/header"
         xmlns:android="http://schemas.android.com/apk/res/android">
         <ImageView
             android:onClick="finish"
@@ -47,7 +47,7 @@
         app:tabIndicatorColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/welcome"
+        android:background="@drawable/header"
         app:tabMode="fixed">
     </android.support.design.widget.TabLayout>
     <android.support.v4.view.ViewPager

@@ -88,6 +88,12 @@ public class Bookings extends AppCompatActivity {
         getBookingsList();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        models.clear();
+    }
+
     public void finish(View view) {
         Constants.clickEffect(view);
         finish();

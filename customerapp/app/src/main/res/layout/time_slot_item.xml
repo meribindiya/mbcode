@@ -12,6 +12,6 @@
         android:layout_width="0dp"
         android:layout_weight="0.5"
         android:textColor="@color/dark_gray"
-        android:layout_height="30dp"
+        android:layout_height="35dp"
         android:text="9 AM to 9:30 AM" />
 </LinearLayout>

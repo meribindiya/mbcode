@@ -17,7 +17,7 @@ public class Constants {
     public static final String WEBSITE = "APP_STAGING";
     public static final String CALLBACK_URL = "https://pguat.paytm.com/paytmchecksum/paytmCallback.jsp";
 
-    public static final String baseUrl = "http://104.251.211.205:9081";
+    public static final String baseUrl = "http://live.meribindiya.com";
     //public static final String baseUrl = "http://127.0.0.1:8081";
     public static final String loginUrl = baseUrl+"/user/"; //+ phone number
     public static final String userUpdate = baseUrl+"/user/update";
