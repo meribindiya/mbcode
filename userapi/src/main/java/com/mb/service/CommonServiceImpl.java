@@ -80,4 +80,13 @@ public class CommonServiceImpl implements CommonService {
 		return commonDao.findOneWithDistinctRootEntity(class1, orderid);
 	}
 
+	@Override
+	public <T> void delete(T t) throws Exception {
+		commonDao.delete(t);
+	}
+
+	@Override
+	public <T> Double findSumByProperties(Class<T> class1, String column, Map<String, Object> map) throws Exception {
+		return commonDao.findSumByProperties(class1, column, map);
+	}
 }

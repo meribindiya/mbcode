@@ -8,6 +8,7 @@ import java.util.Map;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -118,4 +119,20 @@ public class CommonDaoImpl implements CommonDao {
 		return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 	}
 
+	@Override
+	public <T> void delete(T t) throws Exception {
+		sessionFactory.getCurrentSession().delete(t);
+	}
+
+	@Override
+	public <T> Double findSumByProperties(Class<T> class1, String column, Map<String, Object> map) throws Exception {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(class1);
+        criteria.setProjection(Projections.sum(column));
+        map.keySet().stream().forEach(key -> {
+            criteria.add(Restrictions.eq(key, map.get(key)));
+        });
+        Object sum = criteria.uniqueResult();
+		return sum != null ? (double) sum : 0;
+	}
 }

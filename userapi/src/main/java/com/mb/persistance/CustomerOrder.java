@@ -74,6 +74,8 @@ public class CustomerOrder {
 	@Transient
 	private Address address;
 
+	private double paidWithWallet;
+
 	public Long getId() {
 		return id;
 	}
@@ -274,17 +276,44 @@ public class CustomerOrder {
 		this.address = address;
 	}
 
-	@Override
-	public String toString() {
-		return "CustomerOrder [id=" + id + ", booking_date=" + booking_date + ", booking_time=" + booking_time
-				+ ", userid=" + userid + ", mobile=" + mobile + ", addressid=" + addressid + ", online_source_id="
-				+ online_source_id + ", online_source_txnid=" + online_source_txnid + ", online_source_txndate="
-				+ online_source_txndate + ", pymnt_mode=" + pymnt_mode + ", pymnt_source=" + pymnt_source
-				+ ", category_id=" + category_id + ", total=" + total + ", spid=" + spid + ", order_status_code="
-				+ order_status_code + ", utf1=" + utf1 + ", utf2=" + utf2 + ", utf3=" + utf3 + ", booked_at="
-				+ booked_at + ", services=" + services + ", orderstatus=" + orderstatus + ", bookingdate=" + bookingdate
-				+ ", bookedat=" + bookedat + ", customerOrderServices=" + customerOrderServices + ", address=" + address
-				+ "]";
-	}
+    public double getPaidWithWallet() {
+        return paidWithWallet;
+    }
+
+    public void setPaidWithWallet(double paidWithWallet) {
+        this.paidWithWallet = paidWithWallet;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerOrder{" +
+                "id=" + id +
+                ", booking_date=" + booking_date +
+                ", booking_time='" + booking_time + '\'' +
+                ", userid=" + userid +
+                ", mobile=" + mobile +
+                ", addressid=" + addressid +
+                ", online_source_id='" + online_source_id + '\'' +
+                ", online_source_txnid='" + online_source_txnid + '\'' +
+                ", online_source_txndate='" + online_source_txndate + '\'' +
+                ", pymnt_mode=" + pymnt_mode +
+                ", pymnt_source='" + pymnt_source + '\'' +
+                ", category_id=" + category_id +
+                ", total=" + total +
+                ", spid=" + spid +
+                ", order_status_code=" + order_status_code +
+                ", utf1='" + utf1 + '\'' +
+                ", utf2='" + utf2 + '\'' +
+                ", utf3='" + utf3 + '\'' +
+                ", booked_at=" + booked_at +
+                ", services='" + services + '\'' +
+                ", orderstatus='" + orderstatus + '\'' +
+                ", bookingdate='" + bookingdate + '\'' +
+                ", bookedat='" + bookedat + '\'' +
+                ", customerOrderServices=" + customerOrderServices +
+                ", address=" + address +
+                ", paidWithWallet=" + paidWithWallet +
+                '}';
+    }
 
 }

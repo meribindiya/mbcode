@@ -21,6 +21,7 @@ public class OrderRequest {
 	private String utf1;
 	private String utf2;
 	private String utf3;
+	private double paidWithWallet;
 	List<OrderServiceRequest> orderServiceRequests;
 
 	public Long getUserid() {
@@ -168,17 +169,38 @@ public class OrderRequest {
 		this.payment_source_txndate = payment_source_txndate;
 	}
 
-	@Override
-	public String toString() {
-		return "OrderRequest [userid=" + userid + ", mobile=" + mobile + ", addressid=" + addressid + ", booking_date="
-				+ booking_date + ", booking_time=" + booking_time + ", online_source_id=" + online_source_id
-				+ ", online_source_txnid=" + online_source_txnid + ", online_source_txndate=" + online_source_txndate
-				+ ", pymnt_mode=" + pymnt_mode + ", pymnt_source=" + pymnt_source + ", category_id=" + category_id
-				+ ", payment_source_id=" + payment_source_id + ", payment_source_txnid=" + payment_source_txnid
-				+ ", payment_source_txndate=" + payment_source_txndate + ", utf1=" + utf1 + ", utf2=" + utf2 + ", utf3="
-				+ utf3 + ", orderServiceRequests=" + orderServiceRequests + "]";
+	public double getPaidWithWallet() {
+		return paidWithWallet;
 	}
 
-	
+	public void setPaidWithWallet(double paidWithWallet) {
+		this.paidWithWallet = paidWithWallet;
+	}
+
+	@Override
+	public String toString() {
+		return "OrderRequest{" +
+				"userid=" + userid +
+				", mobile=" + mobile +
+				", addressid=" + addressid +
+				", booking_date='" + booking_date + '\'' +
+				", booking_time='" + booking_time + '\'' +
+				", online_source_id='" + online_source_id + '\'' +
+				", online_source_txnid='" + online_source_txnid + '\'' +
+				", online_source_txndate='" + online_source_txndate + '\'' +
+				", pymnt_mode=" + pymnt_mode +
+				", pymnt_source='" + pymnt_source + '\'' +
+				", category_id=" + category_id +
+				", payment_source_id='" + payment_source_id + '\'' +
+				", payment_source_txnid='" + payment_source_txnid + '\'' +
+				", payment_source_txndate='" + payment_source_txndate + '\'' +
+				", utf1='" + utf1 + '\'' +
+				", utf2='" + utf2 + '\'' +
+				", utf3='" + utf3 + '\'' +
+				", paidWithWallet=" + paidWithWallet +
+				", orderServiceRequests=" + orderServiceRequests +
+				'}';
+	}
+
 
 }

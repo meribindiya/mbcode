@@ -33,5 +33,6 @@ public interface CommonService {
 
 	public <T> List<T> findAllByPropertiesWithDistinctRootEntity(Class<T> class1, Map<String, Object> map)
 			throws Exception;
-
+	public <T> void delete(T t) throws Exception;
+	public <T> Double findSumByProperties (Class<T> class1, String column, Map<String, Object> map) throws Exception;
 }

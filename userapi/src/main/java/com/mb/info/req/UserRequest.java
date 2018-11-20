@@ -6,6 +6,7 @@ public class UserRequest {
 	private String email;
 	private String gender;
 	private String name;
+	private String location;
 
 	public Long getMobile() {
 		return mobile;
@@ -39,9 +40,23 @@ public class UserRequest {
 		this.name = name;
 	}
 
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
 	@Override
 	public String toString() {
-		return "UserRequest [mobile=" + mobile + ", email=" + email + ", gender=" + gender + ", name=" + name + "]";
+		return "UserRequest{" +
+				"mobile=" + mobile +
+				", email='" + email + '\'' +
+				", gender='" + gender + '\'' +
+				", name='" + name + '\'' +
+				", location='" + location + '\'' +
+				'}';
 	}
 
 }

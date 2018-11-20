@@ -2,11 +2,11 @@ package com.mb.handlers;
 
 import java.net.URLEncoder;
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import com.mb.info.req.*;
+import com.mb.persistance.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -24,15 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.mb.common.CommonResponse;
 import com.mb.executor.CustomExecutor;
-import com.mb.info.req.AddressRequest;
-import com.mb.info.req.OTPVerificationRequest;
-import com.mb.info.req.UserFcmRequest;
-import com.mb.info.req.UserRequest;
 import com.mb.info.utilities.Utilities;
-import com.mb.persistance.Address;
-import com.mb.persistance.User;
-import com.mb.persistance.UserFCM;
-import com.mb.persistance.UserOTP;
 import com.mb.service.CommonService;
 import io.swagger.annotations.ApiOperation;
 
@@ -81,7 +73,7 @@ public class UserHandler {
 			userOTP.setMobileotpExpiretime(new Timestamp(calendar.getTime().getTime()));
 			commonService.save(userOTP);
 			String message = otp + " is your OTP.";
-			String smsurl = "http://newsms.designhost.in/index.php/smsapi/httpapi/?" + "uname="
+			String smsurl = "http://sendsms.designhost.in/index.php/smsapi/httpapi/?" + "uname="
 					+ URLEncoder.encode("meribindiya", "UTF-8") + "&password=" + URLEncoder.encode("123456", "UTF-8")
 					+ "&sender=" + "BINDYA&route=TA&msgtype=1&receiver=" + URLEncoder.encode(mobile.toString(), "UTF-8")
 					+ "&sms=" + URLEncoder.encode(message, "UTF-8");
@@ -132,7 +124,7 @@ public class UserHandler {
 			userOTP.setMobileotpExpiretime(new Timestamp(calendar.getTime().getTime()));
 			commonService.save(userOTP);
 			String message = otp + " is your OTP.";
-			String smsurl = "http://newsms.designhost.in/index.php/smsapi/httpapi/?" + "uname="
+			String smsurl = "http://sendsms.designhost.in/index.php/smsapi/httpapi/?" + "uname="
 					+ URLEncoder.encode("meribindiya", "UTF-8") + "&password=" + URLEncoder.encode("123456", "UTF-8")
 					+ "&sender=" + "BINDYA&route=TA&msgtype=1&receiver="
 					+ URLEncoder.encode(userRequest.getMobile().toString(), "UTF-8") + "&sms="
@@ -322,7 +314,7 @@ public class UserHandler {
 			userOTP.setMobileotpExpiretime(new Timestamp(calendar.getTime().getTime()));
 			commonService.save(userOTP);
 			String message = otp + " is your OTP.";
-			String smsurl = "http://newsms.designhost.in/index.php/smsapi/httpapi/?" + "uname="
+			String smsurl = "http://sendsms.designhost.in/index.php/smsapi/httpapi/?" + "uname="
 					+ URLEncoder.encode("meribindiya", "UTF-8") + "&password=" + URLEncoder.encode("123456", "UTF-8")
 					+ "&sender=" + "BINDYA&route=TA&msgtype=1&receiver=" + URLEncoder.encode(mobile.toString(), "UTF-8")
 					+ "&sms=" + URLEncoder.encode(message, "UTF-8");
@@ -337,5 +329,101 @@ public class UserHandler {
 			return new ResponseEntity<>(responseObj, HttpStatus.OK);
 		}
 	}
+
+	@GetMapping("/wallet/{userId}")
+	public ResponseEntity<CommonResponse> getWallet (@PathVariable("userId") Long userId) {
+		CommonResponse commonResponse = new CommonResponse();
+		try {
+			Map<String, Object> walletCondition = new HashMap<>();
+			walletCondition.put("userId", userId);
+
+			List<UserWallet> wallet = commonService.findAllByProperties(UserWallet.class, walletCondition);
+
+			if (wallet.isEmpty()) {
+				commonResponse.setStatus(SUCCESS);
+				commonResponse.setMessage("");
+                commonResponse.setObject(new UserWallet());
+			} else {
+				commonResponse.setStatus(SUCCESS);
+				commonResponse.setMessage("");
+				commonResponse.setObject(wallet.get(0));
+			}
+
+		} catch (Exception exception) {
+			LOGGER.error("GET user/wallet/" + userId + " :: context", exception);
+			commonResponse.setStatus(FAILED);
+			commonResponse.setMessage("Something going wrong.\nPlease try after sometime.");
+		}
+		return ResponseEntity.ok(commonResponse);
+	}
+
+	@GetMapping("/imAlive/{userId}")
+	public ResponseEntity<CommonResponse> imAlive (@PathVariable("userId") Long userId) {
+		CommonResponse commonResponse = new CommonResponse();
+		try {
+			Map<String, Object> aliveCondition = new HashMap<>();
+			aliveCondition.put("user_id", userId);
+
+			List<User> users = commonService.findAllByProperties(User.class, aliveCondition);
+
+			if (users.isEmpty()) {
+				commonResponse.setStatus(FAILED);
+				commonResponse.setMessage("Can not find an user.");
+			} else {
+			    User user = users.stream().findFirst().get();
+				user.setAppAlive(true);
+				user.setAppAliveUpdatedAt(new Timestamp(new Date().getTime()));
+				commonService.saveOrUpdate(user);
+				commonResponse.setStatus(SUCCESS);
+			}
+
+		} catch (Exception exception) {
+			LOGGER.error("GET user/profile/" + userId + " :: context", exception);
+			commonResponse.setStatus(FAILED);
+			commonResponse.setMessage("Something going wrong.\nPlease try after sometime.");
+		}
+		return ResponseEntity.ok(commonResponse);
+	}
+
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<CommonResponse> profile (@PathVariable("userId") Long userId) {
+        CommonResponse commonResponse = new CommonResponse();
+        try {
+
+            //backword campatibility
+            Map<String, Object> orderCondition = new HashMap<>();
+            orderCondition.put("userid", userId);
+            orderCondition.put("order_status_code", OrderStatus.ORDER_COMPLETED.getStatus());
+
+            boolean orderEmpty = commonService.checkExistOrNotOnProperties(CustomerOrder.class, orderCondition);
+
+
+            Map<String, Object> statusCondition = new HashMap<>();
+            statusCondition.put("user_id", userId);
+
+            List<User> users = commonService.findAllByProperties(User.class, statusCondition);
+
+            if (users.isEmpty()) {
+                commonResponse.setStatus(FAILED);
+                commonResponse.setMessage("Can not find an user.");
+            } else {
+                User user = users.stream().findFirst().get();
+
+                if (!orderEmpty && !user.isActivated()) {
+                    user.setActivated(true);
+                    commonService.saveOrUpdate(user);
+                }
+
+                commonResponse.setObject(user);
+                commonResponse.setStatus(SUCCESS);
+            }
+
+        } catch (Exception exception) {
+            LOGGER.error("GET user/profile/" + userId + " :: context", exception);
+            commonResponse.setStatus(FAILED);
+            commonResponse.setMessage("Something going wrong.\nPlease try after sometime.");
+        }
+        return ResponseEntity.ok(commonResponse);
+    }
 
 }

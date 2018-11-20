@@ -1,13 +1,12 @@
 package com.mb.persistance;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Objects;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "tbl_user")
@@ -28,6 +27,21 @@ public class User {
 	private Timestamp createdat;
 	private Timestamp updatedat;
 	private Integer walletmin;
+
+	@Column(columnDefinition = "bit default 0")
+	private boolean isActivated; // set to true if made any purchase
+
+    @Column(columnDefinition = "bit default 0")
+	private boolean isBeautyNetworkActivated;// set to true if any of the direct child made any purchase.
+
+	@Column(columnDefinition = "bit default 1")
+	private boolean isAppAlive = true;
+
+	@CreationTimestamp
+	@Column(columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	private Timestamp appAliveUpdatedAt;
+
+	private String location;
 
 	public Long getUser_id() {
 		return user_id;
@@ -133,12 +147,80 @@ public class User {
 		this.walletmin = walletmin;
 	}
 
-	@Override
-	public String toString() {
-		return "User [user_id=" + user_id + ", email=" + email + ", mobile=" + mobile + ", password=" + password
-				+ ", name=" + name + ", dob=" + dob + ", gender=" + gender + ", referredby=" + referredby
-				+ ", referenceid=" + referenceid + ", status=" + status + ", createdat=" + createdat + ", updatedat="
-				+ updatedat + ", walletmin=" + walletmin + "]";
+    public boolean isActivated() {
+        return isActivated;
+    }
+
+    public void setActivated(boolean activated) {
+        isActivated = activated;
+    }
+
+    public boolean isBeautyNetworkActivated() {
+        return isBeautyNetworkActivated;
+    }
+
+    public void setBeautyNetworkActivated(boolean beautyNetworkActivated) {
+        isBeautyNetworkActivated = beautyNetworkActivated;
+    }
+
+	public boolean isAppAlive() {
+		return isAppAlive;
 	}
 
+	public void setAppAlive(boolean appAlive) {
+		isAppAlive = appAlive;
+	}
+
+	public Timestamp getAppAliveUpdatedAt() {
+		return appAliveUpdatedAt;
+	}
+
+	public void setAppAliveUpdatedAt(Timestamp appAliveUpdatedAt) {
+		this.appAliveUpdatedAt = appAliveUpdatedAt;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"user_id=" + user_id +
+				", email='" + email + '\'' +
+				", mobile=" + mobile +
+				", password='" + password + '\'' +
+				", name='" + name + '\'' +
+				", dob=" + dob +
+				", gender='" + gender + '\'' +
+				", referredby='" + referredby + '\'' +
+				", referenceid='" + referenceid + '\'' +
+				", status=" + status +
+				", createdat=" + createdat +
+				", updatedat=" + updatedat +
+				", walletmin=" + walletmin +
+				", isActivated=" + isActivated +
+				", isBeautyNetworkActivated=" + isBeautyNetworkActivated +
+				", isAppAlive=" + isAppAlive +
+				", appAliveUpdatedAt=" + appAliveUpdatedAt +
+				", location='" + location + '\'' +
+				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		User user = (User) o;
+		return Objects.equals(mobile, user.mobile);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(mobile);
+	}
 }

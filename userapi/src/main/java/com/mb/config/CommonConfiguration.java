@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 
 import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -28,6 +30,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class CommonConfiguration {
+
+	@Value("${connector.port}")
+	private int connectorPort;
 
 	@Autowired
 	private DataSource dataSource;
@@ -80,7 +85,7 @@ public class CommonConfiguration {
 	private Connector redirectConnector() {
 		Connector connector = new Connector("AJP/1.3");
 		connector.setScheme("http");
-		connector.setPort(8009);
+		connector.setPort(connectorPort);
 		connector.setSecure(false);
 		connector.setAllowTrace(false);
 		return connector;

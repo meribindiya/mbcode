@@ -2,7 +2,7 @@ package com.mb.info.req;
 
 public enum PymntMode {
 	
-	COD(0), PREPAID(1);
+	COD(0), PREPAID(1), PREPAID_WALLET (2);
 
 	private int status;
 
@@ -20,6 +20,8 @@ public enum PymntMode {
 			return "CASH AT DELIVERY TIME";
 		case 1:
 			return "PREPAID";
+		case 2:
+			return "PREPAID_WALLET";
 		default:
 			return null;
 		}

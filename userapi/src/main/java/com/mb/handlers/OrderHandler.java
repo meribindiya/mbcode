@@ -114,7 +114,10 @@ public class OrderHandler {
 			} else if (1 == orderRequest.getPymnt_mode()) {
 				customerOrder.setPymnt_mode(PymntMode.PREPAID.getStatus());
 				customerOrder.setPymnt_source(PymntMode.findByValue(PymntMode.PREPAID.getStatus()));
-			} else {
+			} else if (2 == orderRequest.getPymnt_mode()) {
+                customerOrder.setPymnt_mode(PymntMode.PREPAID_WALLET.getStatus());
+                customerOrder.setPymnt_source(PymntMode.findByValue(PymntMode.PREPAID_WALLET.getStatus()));
+            } else {
 				commonResponse.setStatus(FAILED);
 				commonResponse.setMessage("Invalid payment mode.");
 				return ResponseEntity.ok(commonResponse);
@@ -207,6 +210,32 @@ public class OrderHandler {
 			return ResponseEntity.ok(commonResponse);
 		}
 
+	}
+
+	@GetMapping("update/{orderid}/{orderStatus}")
+	public ResponseEntity<CommonResponse> updateOrder (@PathVariable("orderid") Long orderid, @PathVariable("orderStatus") int orderStatus) {
+        CommonResponse commonResponse = new CommonResponse();
+        try {
+            Map<String, Object> updateCondition = new HashMap<>();
+            updateCondition.put("id", orderid);
+
+            List<CustomerOrder> orders = commonService.findAllByProperties(CustomerOrder.class, updateCondition);
+
+            if (orders.isEmpty()) {
+                commonResponse.setStatus(FAILED);
+                commonResponse.setMessage("Can not find an order.");
+            } else {
+                CustomerOrder order = orders.stream().findFirst().get();
+                order.setOrder_status_code(orderStatus);
+                commonService.saveOrUpdate(order);
+                commonResponse.setStatus(SUCCESS);
+            }
+        } catch (Exception exception) {
+            LOGGER.error("GET order/update/" + orderid + "/" + orderStatus + ":: context", exception);
+            commonResponse.setStatus(FAILED);
+            commonResponse.setMessage("Something going wrong.\nPlease try after sometime.");
+        }
+        return ResponseEntity.ok(commonResponse);
 	}
 
 }
